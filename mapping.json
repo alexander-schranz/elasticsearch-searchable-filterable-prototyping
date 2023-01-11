@@ -1,0 +1,47 @@
+{
+    "mappings" : {
+        "properties" : {
+            "title" : {
+                "index" : true,
+                "type" : "text"
+            },
+            "tags" : {
+                "fields" : {
+                    "keyword" : {
+                        "doc_values" : true,
+                        "index" : true,
+                        "type" : "keyword"
+                    }
+                },
+                "index" : true,
+                "type" : "text"
+            },
+            "internalTags" : {
+                "fields" : {
+                    "keyword" : {
+                        "doc_values" : true,
+                        "index" : true,
+                        "type" : "keyword"
+                    }
+                },
+                "index" : true,
+                "type" : "text"
+            },
+            "internalComment" : {
+                "doc_values" : false,
+                "index" : false,
+                "type" : "keyword"
+            },
+            "created" : {
+                "doc_values" : true,
+                "index" : true,
+                "type" : "date"
+            },
+            "published" : {
+                "doc_values" : true,
+                "index" : true,
+                "type" : "date"
+            }
+        }
+    }
+}
