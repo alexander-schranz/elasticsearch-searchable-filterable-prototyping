@@ -358,3 +358,62 @@ Works because of `index: false` and `doc_values: false`:
 Expected: 0 Result (error)
 
 > Filterable false is not so important as that can be handled programmatically to avoid the term query that fields.
+
+### Tried solutons:
+
+Add only searchable fields to index.query.default_field:
+
+```
+{
+    "settings": {
+        "index.query.default_field": [
+            "title",
+            "tags",
+            "published"
+        ]
+    },
+    ...
+}
+```
+
+Errors with on a simple search:
+
+```json
+{
+    "type": "query_shard_exception",
+    "reason": "failed to create query: failed to parse date field [Title] with format [strict_date_optional_time||epoch_millis]: [failed to parse date field [Title] with format [strict_date_optional_time||epoch_millis]]",
+    "index_uuid": "Da6D_W-dQuypE_9wSHjIsg",
+    "index": "my_index",
+    "caused_by": {
+        "type": "parse_exception",
+        "reason": "failed to parse date field [Title] with format [strict_date_optional_time||epoch_millis]: [failed to parse date field [Title] with format [strict_date_optional_time||epoch_millis]]",
+        "caused_by": {
+            "type": "illegal_argument_exception",
+            "reason": "failed to parse date field [Title] with format [strict_date_optional_time||epoch_millis]",
+            "caused_by": {
+                "type": "date_time_parse_exception",
+                "reason": "Failed to parse with all enclosed parsers"
+            }
+        }
+    }
+}
+```
+
+When removing `published` also from default_field the search by published content
+is not working:
+
+**Is searchable date ❌**
+
+`POST /my_index/_search`
+
+```json
+{
+    "query": {
+        "query_string": {
+            "query": "2023"
+        }
+    }
+}
+```
+
+Expected: 1 Result
